@@ -1,0 +1,202 @@
+/* ── Reset & Base ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --green: #1D9E75;
+  --green-dark: #0F6E56;
+  --green-deep: #085041;
+  --green-light: #E1F5EE;
+  --green-mid: #9FE1CB;
+  --bg: #F9FAFB;
+  --bg-card: #FFFFFF;
+  --bg-secondary: #F3F4F6;
+  --border: #E5E7EB;
+  --border-light: #F3F4F6;
+  --text: #111827;
+  --text-secondary: #6B7280;
+  --text-tertiary: #9CA3AF;
+  --red: #e74c3c;
+  --red-light: #fdf2f2;
+  --radius: 12px;
+  --radius-sm: 8px;
+  --shadow: 0 1px 3px rgba(0,0,0,.06), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-md: 0 4px 12px rgba(0,0,0,.08);
+  --ring-bg: #E5E7EB;
+  --ring-color: #1D9E75;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 2rem 1rem 4rem;
+}
+
+/* ── App Card ── */
+.app-wrapper {
+  width: 100%;
+  max-width: 460px;
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border);
+}
+
+/* ── Header ── */
+.header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.header-left { display: flex; align-items: center; gap: 10px; flex: 1; }
+.logo-icon { width: 32px; height: 32px; flex-shrink: 0; }
+.app-title { font-size: 17px; font-weight: 600; color: var(--text); }
+.app-subtitle { font-size: 12px; color: var(--text-secondary); margin-top: 1px; }
+
+.badge {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--green-light); color: var(--green-dark);
+  font-size: 12px; padding: 3px 10px; border-radius: 99px; font-weight: 500;
+  white-space: nowrap;
+}
+.badge.analyzing { background: #FFF8E1; color: #B45309; }
+.badge.error { background: var(--red-light); color: var(--red); }
+.dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; }
+
+/* ── Divider ── */
+.divider { border: none; border-top: 1px solid var(--border-light); margin: 1rem 0; }
+
+/* ── Upload Zone ── */
+.upload-zone {
+  border: 1.5px dashed var(--border);
+  border-radius: var(--radius);
+  padding: 2rem 1.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s;
+  background: var(--bg-secondary);
+  position: relative;
+}
+.upload-zone:hover, .upload-zone.drag {
+  border-color: var(--green);
+  background: var(--green-light);
+}
+.upload-zone input[type=file] {
+  position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%;
+}
+.upload-icon { width: 36px; height: 36px; margin: 0 auto 10px; display: block; }
+.upload-label { font-size: 14px; font-weight: 500; color: var(--text); }
+.upload-hint { font-size: 12px; color: var(--text-tertiary); margin-top: 4px; }
+
+.preview-img {
+  width: 100%; max-height: 220px; object-fit: contain;
+  border-radius: var(--radius-sm); display: none; margin-top: 12px;
+}
+
+/* ── Button ── */
+.btn-detect {
+  width: 100%; padding: 12px;
+  border-radius: var(--radius-sm); border: none;
+  background: var(--green); color: #fff;
+  font-size: 15px; font-weight: 500; cursor: pointer;
+  margin-top: 0.85rem;
+  transition: background 0.15s, transform 0.1s;
+  letter-spacing: 0.01em;
+}
+.btn-detect:hover:not(:disabled) { background: var(--green-dark); }
+.btn-detect:active:not(:disabled) { transform: scale(0.98); }
+.btn-detect:disabled { background: var(--border); color: var(--text-tertiary); cursor: not-allowed; }
+
+/* ── Tips ── */
+.tip { font-size: 12px; color: var(--text-tertiary); margin-top: 8px; }
+.tip.center { text-align: center; margin-top: 1rem; }
+
+/* ── Stats ── */
+.stats-row { display: flex; gap: 12px; margin-top: 1.25rem; }
+.stat-card {
+  flex: 1; background: var(--bg-secondary);
+  border-radius: var(--radius-sm); padding: 12px; text-align: center;
+}
+.stat-num { font-size: 22px; font-weight: 600; color: var(--green); }
+.stat-label { font-size: 11px; color: var(--text-tertiary); margin-top: 2px; }
+
+/* ── Results Panel ── */
+.results-panel { animation: fadeIn 0.3s ease; }
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.result-header {
+  display: flex; align-items: flex-start; gap: 12px; margin-bottom: 0.85rem;
+}
+
+.health-badge {
+  padding: 3px 10px; border-radius: 99px; font-size: 12px; font-weight: 600;
+  white-space: nowrap; margin-top: 2px;
+}
+.health-badge.healthy { background: var(--green-light); color: var(--green-dark); }
+.health-badge.diseased { background: #FEF2F2; color: #DC2626; }
+.health-badge.unknown { background: var(--bg-secondary); color: var(--text-secondary); }
+
+.disease-name { font-size: 16px; font-weight: 600; color: var(--text); }
+.plant-name-label { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+
+/* ── Confidence Ring ── */
+.confidence-ring {
+  position: relative; width: 44px; height: 44px;
+  margin-left: auto; flex-shrink: 0;
+}
+.confidence-ring svg { width: 44px; height: 44px; }
+.confidence-num {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700; color: var(--green-dark);
+}
+
+/* ── Summary ── */
+.summary-text {
+  font-size: 13px; color: var(--text-secondary);
+  line-height: 1.6; margin-bottom: 1rem;
+  padding: 10px 12px; background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+}
+
+/* ── Result Grid ── */
+.result-grid { display: grid; gap: 12px; }
+
+.result-section {
+  background: var(--bg-secondary);
+  border-radius: var(--radius-sm);
+  padding: 12px 14px;
+}
+.result-section-title {
+  font-size: 11px; font-weight: 600; text-transform: uppercase;
+  letter-spacing: 0.06em; color: var(--text-tertiary); margin-bottom: 8px;
+}
+.result-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+.result-list li {
+  font-size: 13px; color: var(--text);
+  padding-left: 14px; position: relative; line-height: 1.5;
+}
+.result-list li::before {
+  content: "·"; position: absolute; left: 0;
+  color: var(--green); font-size: 16px; line-height: 1.2;
+}
+
+/* ── Error Banner ── */
+.error-banner {
+  display: flex; align-items: flex-start; gap: 8px;
+  background: var(--red-light); border: 1px solid #FECACA;
+  border-radius: var(--radius-sm); padding: 10px 12px;
+  margin-top: 1rem; font-size: 13px; color: #991B1B;
+}
+
+/* ── Utility ── */
+.hidden { display: none !important; }

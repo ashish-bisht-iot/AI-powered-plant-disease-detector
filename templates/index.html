@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Plant Disease Detector</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+  <div class="app-wrapper">
+    <!-- ── Header ── -->
+    <div class="header">
+      <div class="header-left">
+        <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo-icon">
+          <path d="M8 40 C12 28 24 12 40 8 C40 8 40 24 28 34 C20 40 8 40 8 40Z" fill="#1D9E75" opacity="0.9"/>
+          <path d="M8 40 L22 26" stroke="#085041" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <div>
+          <h2 class="app-title">Plant disease detector</h2>
+          <p class="app-subtitle">AI-powered leaf analysis</p>
+        </div>
+      </div>
+      <span class="badge" id="statusBadge"><span class="dot"></span>Ready</span>
+    </div>
+
+    <div class="divider"></div>
+
+    <!-- ── Upload Zone ── -->
+    <div class="upload-zone" id="zone"
+         ondragover="event.preventDefault(); this.classList.add('drag')"
+         ondragleave="this.classList.remove('drag')"
+         ondrop="handleDrop(event)">
+      <input type="file" accept="image/*" id="fileInput" onchange="handleFile(this)" />
+      <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" class="upload-icon">
+        <rect x="4" y="4" width="32" height="32" rx="8" fill="#9FE1CB" opacity="0.5"/>
+        <path d="M20 26V14M14 20l6-6 6 6" stroke="#0F6E56" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <p class="upload-label" id="uploadLabel">Drop a leaf photo here</p>
+      <p class="upload-hint">or click to browse · JPG, PNG, WEBP</p>
+      <img id="preview" class="preview-img" alt="Leaf preview" />
+    </div>
+
+    <p class="tip" id="fileName"></p>
+
+    <button class="btn-detect" id="detectBtn" disabled onclick="detect()">
+      Analyze leaf
+    </button>
+
+    <!-- ── Stats ── -->
+    <div class="stats-row">
+      <div class="stat-card">
+        <p class="stat-num">38+</p>
+        <p class="stat-label">diseases detected</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-num">95%</p>
+        <p class="stat-label">accuracy rate</p>
+      </div>
+      <div class="stat-card">
+        <p class="stat-num">&lt;2s</p>
+        <p class="stat-label">analysis time</p>
+      </div>
+    </div>
+
+    <p class="tip center">For best results, use a clear close-up of a single leaf in good lighting.</p>
+
+    <!-- ── Results Panel ── -->
+    <div id="resultsPanel" class="results-panel hidden">
+      <div class="divider" style="margin-bottom: 1.25rem;"></div>
+
+      <div class="result-header">
+        <div id="healthBadge" class="health-badge"></div>
+        <div>
+          <p id="diseaseName" class="disease-name"></p>
+          <p id="plantName" class="plant-name-label"></p>
+        </div>
+        <div id="confidenceRing" class="confidence-ring">
+          <svg viewBox="0 0 44 44">
+            <circle cx="22" cy="22" r="18" fill="none" stroke="var(--ring-bg)" stroke-width="4"/>
+            <circle id="confidenceArc" cx="22" cy="22" r="18" fill="none"
+                    stroke="var(--ring-color)" stroke-width="4"
+                    stroke-dasharray="113" stroke-dashoffset="113"
+                    stroke-linecap="round"
+                    transform="rotate(-90 22 22)"/>
+          </svg>
+          <span id="confidenceNum" class="confidence-num">0%</span>
+        </div>
+      </div>
+
+      <p id="summaryText" class="summary-text"></p>
+
+      <div class="result-grid" id="resultGrid"></div>
+    </div>
+
+    <!-- ── Error Banner ── -->
+    <div id="errorBanner" class="error-banner hidden">
+      <svg viewBox="0 0 20 20" fill="none" style="width:16px;height:16px;flex-shrink:0;">
+        <circle cx="10" cy="10" r="9" stroke="#c0392b" stroke-width="1.5"/>
+        <path d="M10 6v4M10 14h.01" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <span id="errorText"></span>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
