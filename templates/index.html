@@ -4,11 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Plant Disease Detector</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
 </head>
 <body>
   <div class="app-wrapper">
-    <!-- ── Header ── -->
+    <!-- Header -->
     <div class="header">
       <div class="header-left">
         <svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="logo-icon">
@@ -16,16 +18,25 @@
           <path d="M8 40 L22 26" stroke="#085041" stroke-width="2" stroke-linecap="round"/>
         </svg>
         <div>
-          <h2 class="app-title">Plant disease detector</h2>
+          <h2 class="app-title">Plant Disease Detector</h2>
           <p class="app-subtitle">AI-powered leaf analysis</p>
         </div>
       </div>
-      <span class="badge" id="statusBadge"><span class="dot"></span>Ready</span>
+      <div style="display:flex;align-items:center;gap:10px;">
+        <a href="/history" class="nav-btn">
+          <svg viewBox="0 0 20 20" fill="none" style="width:15px;height:15px;">
+            <path d="M10 3v7l4 2" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.5"/>
+          </svg>
+          History
+        </a>
+        <span class="badge" id="statusBadge"><span class="dot"></span>Ready</span>
+      </div>
     </div>
 
     <div class="divider"></div>
 
-    <!-- ── Upload Zone ── -->
+    <!-- Upload Zone -->
     <div class="upload-zone" id="zone"
          ondragover="event.preventDefault(); this.classList.add('drag')"
          ondragleave="this.classList.remove('drag')"
@@ -36,69 +47,107 @@
         <path d="M20 26V14M14 20l6-6 6 6" stroke="#0F6E56" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
       </svg>
       <p class="upload-label" id="uploadLabel">Drop a leaf photo here</p>
-      <p class="upload-hint">or click to browse · JPG, PNG, WEBP</p>
+      <p class="upload-hint">or use the buttons below · JPG, PNG, WEBP</p>
       <img id="preview" class="preview-img" alt="Leaf preview" />
     </div>
 
+    <!-- Upload Buttons -->
+    <div class="upload-btns">
+      <label class="upload-btn" for="fileInput">
+        <svg viewBox="0 0 20 20" fill="none" style="width:16px;height:16px;">
+          <rect x="2" y="5" width="16" height="12" rx="2" stroke="currentColor" stroke-width="1.5"/>
+          <path d="M7 5V4a1 1 0 011-1h4a1 1 0 011 1v1" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="10" cy="11" r="3" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+        Browse file
+      </label>
+      <button class="upload-btn camera-btn" onclick="openCamera()">
+        <svg viewBox="0 0 20 20" fill="none" style="width:16px;height:16px;">
+          <path d="M2 7a2 2 0 012-2h1.5l1-2h7l1 2H16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V7z" stroke="currentColor" stroke-width="1.5"/>
+          <circle cx="10" cy="11" r="3" stroke="currentColor" stroke-width="1.5"/>
+        </svg>
+        Take photo
+      </button>
+    </div>
+
     <p class="tip" id="fileName"></p>
+    <button class="btn-detect" id="detectBtn" disabled onclick="detect()">Analyze leaf</button>
 
-    <button class="btn-detect" id="detectBtn" disabled onclick="detect()">
-      Analyze leaf
-    </button>
-
-    <!-- ── Stats ── -->
+    <!-- Stats -->
     <div class="stats-row">
-      <div class="stat-card">
-        <p class="stat-num">38+</p>
-        <p class="stat-label">diseases detected</p>
-      </div>
-      <div class="stat-card">
-        <p class="stat-num">95%</p>
-        <p class="stat-label">accuracy rate</p>
-      </div>
-      <div class="stat-card">
-        <p class="stat-num">&lt;2s</p>
-        <p class="stat-label">analysis time</p>
-      </div>
+      <div class="stat-card"><p class="stat-num">38+</p><p class="stat-label">diseases detected</p></div>
+      <div class="stat-card"><p class="stat-num">95%</p><p class="stat-label">accuracy rate</p></div>
+      <div class="stat-card"><p class="stat-num">&lt;2s</p><p class="stat-label">analysis time</p></div>
     </div>
 
     <p class="tip center">For best results, use a clear close-up of a single leaf in good lighting.</p>
 
-    <!-- ── Results Panel ── -->
+    <!-- Results Panel -->
     <div id="resultsPanel" class="results-panel hidden">
-      <div class="divider" style="margin-bottom: 1.25rem;"></div>
-
+      <div class="divider" style="margin-bottom:1.25rem;"></div>
       <div class="result-header">
         <div id="healthBadge" class="health-badge"></div>
-        <div>
+        <div style="flex:1;">
           <p id="diseaseName" class="disease-name"></p>
           <p id="plantName" class="plant-name-label"></p>
         </div>
-        <div id="confidenceRing" class="confidence-ring">
+        <div class="confidence-ring">
           <svg viewBox="0 0 44 44">
             <circle cx="22" cy="22" r="18" fill="none" stroke="var(--ring-bg)" stroke-width="4"/>
             <circle id="confidenceArc" cx="22" cy="22" r="18" fill="none"
                     stroke="var(--ring-color)" stroke-width="4"
                     stroke-dasharray="113" stroke-dashoffset="113"
-                    stroke-linecap="round"
-                    transform="rotate(-90 22 22)"/>
+                    stroke-linecap="round" transform="rotate(-90 22 22)"/>
           </svg>
           <span id="confidenceNum" class="confidence-num">0%</span>
         </div>
       </div>
-
       <p id="summaryText" class="summary-text"></p>
-
       <div class="result-grid" id="resultGrid"></div>
     </div>
 
-    <!-- ── Error Banner ── -->
+    <!-- Error Banner -->
     <div id="errorBanner" class="error-banner hidden">
       <svg viewBox="0 0 20 20" fill="none" style="width:16px;height:16px;flex-shrink:0;">
         <circle cx="10" cy="10" r="9" stroke="#c0392b" stroke-width="1.5"/>
         <path d="M10 6v4M10 14h.01" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/>
       </svg>
       <span id="errorText"></span>
+    </div>
+  </div>
+
+  <!-- Camera Modal -->
+  <div id="cameraModal" class="modal-overlay hidden">
+    <div class="modal-box">
+      <div class="modal-header">
+        <p class="modal-title">
+          <svg viewBox="0 0 20 20" fill="none" style="width:16px;height:16px;display:inline;vertical-align:middle;margin-right:6px;">
+            <path d="M2 7a2 2 0 012-2h1.5l1-2h7l1 2H16a2 2 0 012 2v8a2 2 0 01-2 2H4a2 2 0 01-2-2V7z" stroke="#1D9E75" stroke-width="1.5"/>
+            <circle cx="10" cy="11" r="3" stroke="#1D9E75" stroke-width="1.5"/>
+          </svg>
+          Camera
+        </p>
+        <button class="modal-close" onclick="closeCamera()">✕</button>
+      </div>
+
+      <video id="cameraFeed" autoplay playsinline class="camera-feed"></video>
+
+      <div id="cameraError" class="error-banner hidden" style="margin-top:0.75rem;">
+        <svg viewBox="0 0 20 20" fill="none" style="width:16px;height:16px;flex-shrink:0;">
+          <circle cx="10" cy="10" r="9" stroke="#c0392b" stroke-width="1.5"/>
+          <path d="M10 6v4M10 14h.01" stroke="#c0392b" stroke-width="1.5" stroke-linecap="round"/>
+        </svg>
+        <span></span>
+      </div>
+
+      <div style="display:flex;gap:10px;margin-top:1rem;">
+        <button class="upload-btn" onclick="closeCamera()" style="flex:0 0 auto;padding:10px 16px;">Cancel</button>
+        <button class="btn-detect" onclick="capturePhoto()" style="margin-top:0;">
+          📸 Capture photo
+        </button>
+      </div>
+
+      <canvas id="captureCanvas" style="display:none;"></canvas>
     </div>
   </div>
 
