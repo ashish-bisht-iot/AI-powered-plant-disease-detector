@@ -200,3 +200,74 @@ body {
 
 /* ── Utility ── */
 .hidden { display: none !important; }
+
+/* ── Nav Button ── */
+.nav-btn {
+  display: inline-flex; align-items: center; gap: 5px;
+  background: var(--bg-secondary); color: var(--text-secondary);
+  font-size: 12px; font-weight: 500; padding: 5px 12px;
+  border-radius: 99px; text-decoration: none;
+  border: 1px solid var(--border);
+  transition: all 0.15s; white-space: nowrap;
+  font-family: 'DM Sans', sans-serif;
+}
+.nav-btn:hover { border-color: var(--green); color: var(--green-dark); background: var(--green-light); }
+
+/* ── Upload Buttons Row ── */
+.upload-btns {
+  display: flex; gap: 10px; margin-top: 0.75rem;
+}
+.upload-btn {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 7px;
+  padding: 9px 12px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--bg-secondary);
+  color: var(--text-secondary); font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all 0.15s;
+  font-family: 'DM Sans', sans-serif;
+}
+.upload-btn:hover { border-color: var(--green); color: var(--green-dark); background: var(--green-light); }
+.camera-btn:hover { border-color: #2563EB; color: #1D4ED8; background: #EFF6FF; }
+
+/* ── Font override ── */
+body { font-family: 'DM Sans', sans-serif; }
+
+/* ── Camera Modal ── */
+.modal-overlay {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(0,0,0,0.6);
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem;
+  backdrop-filter: blur(4px);
+}
+.modal-box {
+  background: var(--bg-card);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  width: 100%; max-width: 480px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  animation: modalIn 0.2s ease;
+}
+@keyframes modalIn {
+  from { opacity: 0; transform: scale(0.95) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+.modal-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 1rem;
+}
+.modal-title {
+  font-size: 15px; font-weight: 600; color: var(--text);
+}
+.modal-close {
+  background: var(--bg-secondary); border: none;
+  width: 28px; height: 28px; border-radius: 50%;
+  cursor: pointer; font-size: 13px; color: var(--text-secondary);
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.15s;
+}
+.modal-close:hover { background: var(--border); }
+.camera-feed {
+  width: 100%; border-radius: var(--radius-sm);
+  background: #000; max-height: 300px; object-fit: cover;
+  display: block;
+}
